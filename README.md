@@ -4,3 +4,7 @@ This tool can be ran against an AWS account and delete all existing resources to
 
 You can optionally exclude some resources.
 
+## Commands
+
+- list
+- delete --dry
