@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Aws\Ec2\Ec2Client;
+use Aws\S3\S3Client;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(Ec2Client::class, function ($app, $args) {
             return new Ec2Client(['region' => $args['region']]);
+        });
+        $this->app->bind(S3Client::class, function ($app, $args) {
+            return new S3Client(['region' => $args['region']]);
         });
     }
 }

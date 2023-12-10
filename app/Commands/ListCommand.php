@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Services\AWSService;
 use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
@@ -12,33 +13,51 @@ class ListCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'list';
+    protected $signature = "fetch
+    {--onlyRegions= : Limit regions to this space-delimited list}
+    {--outputJson : Output data as JSON}
+    ";
 
     /**
      * The description of the command.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'List all AWS resources in the account.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function handle(AWSService $awsService): int
     {
-        //
-    }
+        $outputJson = $this->option('outputJson');
+        $regions = array_filter(explode(' ', $this->option('onlyRegions', '')));
 
-    /**
-     * Define the command's schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
-    {
-        // $schedule->command(static::class)->everyMinute();
+        $onlyRegions = empty($regions) ? config('aws.regions') : $regions;
+
+        $resourceGroups = $awsService->list($onlyRegions);
+
+        $list = [];
+
+        foreach ($resourceGroups as $group => $groupRegions) {
+            foreach ($groupRegions as $region => $resources) {
+                foreach ($resources as $resource) {
+                    $list[] = [
+                        'type' => $group,
+                        'id' => $resource['id'],
+                        'name' => $resource['name'],
+                        'region' => $region,
+                    ];
+                }
+            }
+        }
+
+        if ($outputJson) {
+            dump(json_encode($list, JSON_PRETTY_PRINT));
+        } else {
+            $this->table(
+                ['type', 'id', 'name', 'region'],
+                $list
+            );
+        }
+
+        return self::SUCCESS;
     }
 }

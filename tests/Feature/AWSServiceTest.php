@@ -3,14 +3,12 @@
 use App\Services\AWSService;
 use Aws\Ec2\Ec2Client;
 use Aws\Result;
+use Aws\S3\S3Client;
 use Mockery\MockInterface;
 
 describe('list', function () {
-    $region = 'ap-southeast-2';
-
-    test('getSecurityGroups', function () use ($region) {
+    test('getSecurityGroups', function () {
         $service = new AWSService();
-        config()->set('aws.regions', [$region]);
 
         mock(Ec2Client::class, function (MockInterface $mock) {
             $result = new Result(
@@ -195,14 +193,13 @@ describe('list', function () {
             $mock->expects('describeSecurityGroups')->andReturn($result);
         });
 
-        $resources = $service->getSecurityGroups();
+        $resources = $service->getSecurityGroups(['ap-southeast-2']);
 
         expect($resources)->toHaveKey('ap-southeast-2');
     });
 
-    test('getEc2Instances', function () use ($region) {
+    test('getEc2Instances', function () {
         $service = new AWSService();
-        config()->set('aws.regions', [$region]);
 
         mock(Ec2Client::class, function (MockInterface $mock) {
             $result = new Result(
@@ -373,8 +370,148 @@ describe('list', function () {
             $mock->expects('describeInstances')->andReturn($result);
         });
 
-        $resources = $service->getEc2Instances();
+        $resources = $service->getEc2Instances(['ap-southeast-2']);
 
         expect($resources)->toHaveKey('ap-southeast-2');
     });
+
+    test('getVolumes', function () {
+        $service = new AWSService();
+
+        mock(Ec2Client::class, function (MockInterface $mock) {
+            $result = new Result(
+                [
+                    "Volumes" => [
+                        0 => [
+                            "Attachments" => [],
+                            "AvailabilityZone" => "ap-southeast-2a",
+                            "CreateTime" => null,
+                            "Encrypted" => false,
+                            "Size" => 100,
+                            "SnapshotId" => "",
+                            "State" => "available",
+                            "VolumeId" => "vol-053911a2e63fcc653",
+                            "Iops" => 3000,
+                            "VolumeType" => "gp3",
+                            "MultiAttachEnabled" => false,
+                            "Throughput" => 125,
+                        ],
+                    ],
+                    "@metadata" => [
+                        "statusCode" => 200,
+                        "effectiveUri" => "https://ec2.ap-southeast-2.amazonaws.com",
+                        "headers" => [
+                            "x-amzn-requestid" => "ee7cdd44-6788-470b-8d19-46a2d4389bbc",
+                            "cache-control" => "no-cache, no-store",
+                            "strict-transport-security" => "max-age=31536000; includeSubDomains",
+                            "content-type" => "text/xml;charset=UTF-8",
+                            "content-length" => "785",
+                            "date" => "Sun, 10 Dec 2023 01:24:06 GMT",
+                            "server" => "AmazonEC2",
+                        ],
+                    ],
+
+                ],
+            );
+
+            app()->bind(Ec2Client::class, fn() => $mock);
+
+            $mock->expects('describeVolumes')->andReturn($result);
+        });
+
+        $resources = $service->getVolumes(['ap-southeast-2']);
+
+        expect($resources)->toHaveKey('ap-southeast-2');
+    });
+
+    test('listBuckets', function () {
+        $service = new AWSService();
+        mock(S3Client::class, function (MockInterface $mock) {
+            $result = new Result(
+                [
+                    "Buckets" => [
+                        0 => [
+                            "Name" => "elasticbeanstalk-ap-southeast-2-450332024000",
+                            "CreationDate" => null,
+                        ],
+                        1 => [
+                            "Name" => "elasticbeanstalk-us-west-2-450332024000",
+                            "CreationDate" => null,
+                        ],
+                        2 => [
+                            "Name" => "original-solutions",
+                            "CreationDate" => null,
+                        ],
+                        3 => [
+                            "Name" => "vapor-ap-southeast-2-1701041732",
+                            "CreationDate" => null,
+                        ],
+                        4 => [
+                            "Name" => "vapor-ap-southeast-2-1701078094",
+                            "CreationDate" => null,
+                        ],
+                        5 => [
+                            "Name" => "vapor-ap-southeast-2-assets-1701041732",
+                            "CreationDate" => null,
+                        ],
+                        6 => [
+                            "Name" => "vapor-ap-southeast-2-assets-1701078094",
+                            "CreationDate" => null,
+                        ],
+                    ],
+                    "Owner" => [
+                        "DisplayName" => "tom.kaczocha",
+                        "ID" => "bceaf77a1b13fe92dc0a6cd52ff112a0b28cd9f1f68f60beb76824b7901ab8fb",
+                    ],
+                    "@metadata" => [
+                        "statusCode" => 200,
+                        "effectiveUri" => "https://s3.ap-southeast-2.amazonaws.com/",
+                        "headers" => [
+                            "x-amz-id-2" => "RoUOivOzVrjBpBR3G2c0bdMRlu5CMq882PQEZS202ibEkvFO2jyUVuU4RtmjolEj/SS+ylQo8aU=",
+                            "x-amz-request-id" => "TGDN7DMFRBCX7VBQ",
+                            "date" => "Sun, 10 Dec 2023 01:12:33 GMT",
+                            "content-type" => "application/xml",
+                            "transfer-encoding" => "chunked",
+                            "server" => "AmazonS3",
+                        ],
+                        "transferStats" => [
+                            "http" => [
+                                0 => [],
+                            ],
+                        ],
+                    ],
+                ],
+            );
+
+            app()->bind(S3Client::class, fn() => $mock);
+
+            $mock->expects('listBuckets')->andReturn($result);
+        });
+
+        $resources = $service->getS3Buckets('ap-southeast-2');
+
+        expect($resources)->toHaveKey('global');
+    });
+
+    test('validates region list successfully', function () {
+        $service = new AWSService();
+
+        expect($service->validateRegions(['ap-southeast-2']))->toBeTrue();
+        expect($service->validateRegions(['ap-southeast-2', 'us-west-2']))->toBeTrue();
+    });
+
+    describe('validate regions', function () {
+        test('invalid region throws exception', function () {
+            $service = new AWSService();
+
+            expect($service->validateRegions(['fake']));
+        })->throws('"fake" is not a valid region.');
+
+        test('invalid region in list throws exception', function () {
+            $service = new AWSService();
+
+            expect($service->validateRegions(['ap-southeast-2', 'us-west-2', 'another-fake']));
+        })->throws('"another-fake" is not a valid region.');
+    });
+
 });
