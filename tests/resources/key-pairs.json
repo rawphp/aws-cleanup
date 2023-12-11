@@ -1,0 +1,25 @@
+{
+    "KeyPairs": [
+        {
+            "KeyPairId": "key-053b4ecad08b49744",
+            "KeyFingerprint": "ee:bb:94:d8:9c:62:72:64:ff:2e:3a:2c:17:08:07:f9:be:a6:35:a4",
+            "KeyName": "keys",
+            "KeyType": "rsa",
+            "Tags": [],
+            "CreateTime": null
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https://ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "8765a448-aee4-4a13-806a-9bc19a832706",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "content-type": "text/xml;charset=UTF-8",
+            "content-length": "582",
+            "date": "Sun, 10 Dec 2023 03:26:44 GMT",
+            "server": "AmazonEC2"
+        }
+    }
+}

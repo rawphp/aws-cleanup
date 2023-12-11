@@ -1,0 +1,176 @@
+{
+    "SecurityGroups": [
+        {
+            "Description": "default VPC security group",
+            "GroupName": "default",
+            "IpPermissions": [
+                {
+                    "FromPort": 80,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [
+                        {
+                            "CidrIpv6": "::/0"
+                        }
+                    ],
+                    "PrefixListIds": [],
+                    "ToPort": 80,
+                    "UserIdGroupPairs": []
+                },
+                {
+                    "FromPort": 5432,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [
+                        {
+                            "CidrIpv6": "::/0"
+                        }
+                    ],
+                    "PrefixListIds": [],
+                    "ToPort": 5432,
+                    "UserIdGroupPairs": []
+                },
+                {
+                    "IpProtocol": "-1",
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "UserIdGroupPairs": [
+                        {
+                            "GroupId": "sg-0824a72b0d7b354c8",
+                            "UserId": "450332024000"
+                        }
+                    ]
+                },
+                {
+                    "FromPort": 22,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [
+                        {
+                            "CidrIpv6": "::/0"
+                        }
+                    ],
+                    "PrefixListIds": [],
+                    "ToPort": 22,
+                    "UserIdGroupPairs": []
+                },
+                {
+                    "FromPort": 3306,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [
+                        {
+                            "CidrIpv6": "::/0"
+                        }
+                    ],
+                    "PrefixListIds": [],
+                    "ToPort": 3306,
+                    "UserIdGroupPairs": []
+                },
+                {
+                    "FromPort": 443,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [
+                        {
+                            "CidrIpv6": "::/0"
+                        }
+                    ],
+                    "PrefixListIds": [],
+                    "ToPort": 443,
+                    "UserIdGroupPairs": []
+                }
+            ],
+            "OwnerId": "450332024000",
+            "GroupId": "sg-0824a72b0d7b354c8",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "UserIdGroupPairs": []
+                }
+            ],
+            "VpcId": "vpc-00cb0341a9dcbb02a"
+        },
+        {
+            "Description": "default VPC security group",
+            "GroupName": "default",
+            "IpPermissions": [
+                {
+                    "IpProtocol": "-1",
+                    "IpRanges": [],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "UserIdGroupPairs": [
+                        {
+                            "GroupId": "sg-0e8ba8b63a82bbd00",
+                            "UserId": "450332024000"
+                        }
+                    ]
+                }
+            ],
+            "OwnerId": "450332024000",
+            "GroupId": "sg-0e8ba8b63a82bbd00",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "UserIdGroupPairs": []
+                }
+            ],
+            "VpcId": "vpc-0229f25ebb89db810"
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https://ec2.us-east-1.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "a2d28083-816e-4760-bfd1-e6e7fea0d243",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "accept-encoding",
+            "content-type": "text/xml;charset=UTF-8",
+            "content-length": "5825",
+            "date": "Sat, 09 Dec 2023 00:56:10 GMT",
+            "server": "AmazonEC2"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}

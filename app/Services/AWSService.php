@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Aws\Ec2\Ec2Client;
+use Aws\ElasticLoadBalancing\ElasticLoadBalancingClient;
 use Aws\S3\S3Client;
 use Exception;
 
@@ -21,12 +22,18 @@ class AWSService
         $instances = $this->getEc2Instances($regions);
 
         // ec2 load balancers
+        $loadBalancers = $this->getLoadBalancers($regions);
+
         // volumes
         $volumes = $this->getVolumes($regions);
 
         // auto-scaling groups
         // elastic IPs
+        $elasticIps = $this->getElasticIPs($regions);
+
         // key pairs
+        $keyPairs = $this->getKeyPairs($regions);
+
         // snapshots
 
         // S3 buckets
@@ -37,6 +44,8 @@ class AWSService
             'securityGroups' => $securityGroups,
             'ec2Instances' => $instances,
             'volumes' => $volumes,
+            'keyPairs' => $keyPairs,
+            'elasticIPs' => $elasticIps,
             's3Buckets' => $buckets,
         ];
     }
@@ -139,6 +148,84 @@ class AWSService
         }
 
         return ['global' => $buckets];
+    }
+
+    public function getKeyPairs(array $regions): array
+    {
+        $keyPairs = [];
+
+        foreach ($regions as $region) {
+            dump('Checking key pairs for region: ' . $region);
+            $keyPairsByRegion = [];
+
+            /** @var Ec2Client $ec2Client */
+            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
+
+            $result = $ec2Client->describeKeyPairs();
+
+            foreach ($result->get('KeyPairs') as $keyPair) {
+                $keyPairsByRegion[] = [
+                    'id' => $keyPair['KeyPairId'],
+                    'name' => $keyPair['KeyName'],
+                ];
+            }
+
+            $keyPairs[$region] = $keyPairsByRegion;
+        }
+
+        return $keyPairs;
+    }
+
+    public function getElasticIPs(array $regions): array
+    {
+        $addresses = [];
+
+        foreach ($regions as $region) {
+            dump('Checking elastic IPs for region: ' . $region);
+            $addressByRegion = [];
+
+            /** @var Ec2Client $ec2Client */
+            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
+
+            $result = $ec2Client->describeAddresses();
+
+            foreach ($result->get('Addresses') as $address) {
+                $addressByRegion[] = [
+                    'id' => $address['AllocationId'],
+                    'name' => $address['PublicIp'],
+                ];
+            }
+
+            $addresses[$region] = $addressByRegion;
+        }
+
+        return $addresses;
+    }
+
+    public function getLoadBalancers(array $regions): array
+    {
+        $loadBalancers = [];
+
+        foreach ($regions as $region) {
+            dump('Checking load balancers for region: ' . $region);
+            $loadBalancersByRegion = [];
+
+            /** @var ElasticLoadBalancingClient $ec2Client */
+            $client = resolve(ElasticLoadBalancingClient::class, ['region' => $region]);
+
+            $result = $client->describeLoadBalancers();
+
+            foreach ($result->get('LoadBalancerDescriptions') as $loadBalancer) {
+                $loadBalancersByRegion[] = [
+                    'id' => '',
+                    'name' => $loadBalancer['LoadBalancerName'],
+                ];
+            }
+
+            $loadBalancers[$region] = $loadBalancersByRegion;
+        }
+
+        return $loadBalancers;
     }
 
     /**

@@ -1,0 +1,31 @@
+{
+    "Volumes": [
+        {
+            "Attachments": [],
+            "AvailabilityZone": "ap-southeast-2a",
+            "CreateTime": null,
+            "Encrypted": false,
+            "Size": 100,
+            "SnapshotId": "",
+            "State": "available",
+            "VolumeId": "vol-053911a2e63fcc653",
+            "Iops": 3000,
+            "VolumeType": "gp3",
+            "MultiAttachEnabled": false,
+            "Throughput": 125
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https://ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "ee7cdd44-6788-470b-8d19-46a2d4389bbc",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "content-type": "text/xml;charset=UTF-8",
+            "content-length": "785",
+            "date": "Sun, 10 Dec 2023 01:24:06 GMT",
+            "server": "AmazonEC2"
+        }
+    }
+}

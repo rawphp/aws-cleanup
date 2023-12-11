@@ -3,17 +3,16 @@
 namespace App\Commands;
 
 use App\Services\AWSService;
-use Illuminate\Console\Scheduling\Schedule;
 use LaravelZero\Framework\Commands\Command;
 
-class ListCommand extends Command
+class ShowCommand extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = "fetch
+    protected $signature = "show
     {--onlyRegions= : Limit regions to this space-delimited list}
     {--outputJson : Output data as JSON}
     ";

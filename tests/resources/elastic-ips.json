@@ -1,0 +1,38 @@
+{
+    "Addresses": [
+        {
+            "PublicIp": "54.206.9.207",
+            "AllocationId": "eipalloc-0abb62d5345b74272",
+            "Domain": "vpc",
+            "Tags": [
+                {
+                    "Key": "aws:cloudformation:logical-id",
+                    "Value": "ElasticIpOne"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-id",
+                    "Value": "arn:aws:cloudformation:ap-southeast-2:450332024000:stack/vapor-network-1701041738/89891b50-8cb4-11ee-afd6-0aa1f887c3f9"
+                },
+                {
+                    "Key": "aws:cloudformation:stack-name",
+                    "Value": "vapor-network-1701041738"
+                }
+            ],
+            "PublicIpv4Pool": "amazon",
+            "NetworkBorderGroup": "ap-southeast-2"
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https://ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "d332863d-4511-43a5-9cfb-104377186747",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "content-type": "text/xml;charset=UTF-8",
+            "content-length": "1172",
+            "date": "Sun, 10 Dec 2023 04:43:19 GMT",
+            "server": "AmazonEC2"
+        }
+    }
+}

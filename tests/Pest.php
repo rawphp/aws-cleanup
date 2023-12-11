@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Support\Facades\File;
+
 uses(Tests\TestCase::class)->in('Feature');
 
 /*
@@ -42,4 +44,11 @@ expect()->extend('toBeOne', function () {
 function something(): void
 {
     // ..
+}
+
+function loadJson(string $name): array
+{
+    $data = File::get(base_path('tests/resources/' . $name . '.json'));
+
+    return json_decode($data, true);
 }

@@ -1,0 +1,53 @@
+{
+    "Buckets": [
+        {
+            "Name": "elasticbeanstalk-ap-southeast-2-450332024000",
+            "CreationDate": null
+        },
+        {
+            "Name": "elasticbeanstalk-us-west-2-450332024000",
+            "CreationDate": null
+        },
+        {
+            "Name": "original-solutions",
+            "CreationDate": null
+        },
+        {
+            "Name": "vapor-ap-southeast-2-1701041732",
+            "CreationDate": null
+        },
+        {
+            "Name": "vapor-ap-southeast-2-1701078094",
+            "CreationDate": null
+        },
+        {
+            "Name": "vapor-ap-southeast-2-assets-1701041732",
+            "CreationDate": null
+        },
+        {
+            "Name": "vapor-ap-southeast-2-assets-1701078094",
+            "CreationDate": null
+        }
+    ],
+    "Owner": {
+        "DisplayName": "tom.kaczocha",
+        "ID": "bceaf77a1b13fe92dc0a6cd52ff112a0b28cd9f1f68f60beb76824b7901ab8fb"
+    },
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https://s3.ap-southeast-2.amazonaws.com/",
+        "headers": {
+            "x-amz-id-2": "RoUOivOzVrjBpBR3G2c0bdMRlu5CMq882PQEZS202ibEkvFO2jyUVuU4RtmjolEj/SS+ylQo8aU=",
+            "x-amz-request-id": "TGDN7DMFRBCX7VBQ",
+            "date": "Sun, 10 Dec 2023 01:12:33 GMT",
+            "content-type": "application/xml",
+            "transfer-encoding": "chunked",
+            "server": "AmazonS3"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}
