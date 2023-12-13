@@ -61,6 +61,7 @@ class AWSService
             's3Buckets' => $buckets,
             'vpcs' => $vpcs,
             'subnets' => $subnets,
+            'autoScalingGroups' => $scalingGroups,
             'availabilityZones' => $availabilityZones,
         ];
     }
