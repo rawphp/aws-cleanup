@@ -1,0 +1,40 @@
+{
+    "Vpcs": [
+        {
+            "CidrBlock": "172.31.0.0\/16",
+            "DhcpOptionsId": "dopt-07ed9256d28056fb5",
+            "State": "available",
+            "VpcId": "vpc-0769fc0b342a7b69f",
+            "OwnerId": "450332024000",
+            "InstanceTenancy": "default",
+            "CidrBlockAssociationSet": [
+                {
+                    "AssociationId": "vpc-cidr-assoc-0d5ed1c52d1239891",
+                    "CidrBlock": "172.31.0.0\/16",
+                    "CidrBlockState": {
+                        "State": "associated"
+                    }
+                }
+            ],
+            "IsDefault": true
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https:\/\/ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "6641b122-991a-4347-9d88-bbf57e4af62f",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "content-type": "text\/xml;charset=UTF-8",
+            "content-length": "986",
+            "date": "Wed, 13 Dec 2023 01:22:59 GMT",
+            "server": "AmazonEC2"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}

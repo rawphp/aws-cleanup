@@ -1,0 +1,36 @@
+{
+  "Snapshots": [
+    {
+      "Description": "hvm-ssd\/ubuntu-precise-amd64-server-20150930",
+      "Encrypted": false,
+      "OwnerId": "099720109477",
+      "Progress": "100%",
+      "SnapshotId": "snap-09d7da36",
+      "StartTime": "2015-10-01T02:26:44+00:00",
+      "State": "completed",
+      "VolumeId": "vol-cf5bbc05",
+      "VolumeSize": 8,
+      "OwnerAlias": "amazon",
+      "StorageTier": "standard"
+    }
+  ],
+  "@metadata": {
+    "statusCode": 200,
+    "effectiveUri": "https:\/\/ec2.ap-southeast-2.amazonaws.com",
+    "headers": {
+      "x-amzn-requestid": "f0c8bf9d-8af9-4d39-9ba7-f1a20f98eb7f",
+      "cache-control": "no-cache, no-store",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "vary": "accept-encoding",
+      "content-type": "text\/xml;charset=UTF-8",
+      "transfer-encoding": "chunked",
+      "date": "Wed, 13 Dec 2023 01:07:25 GMT",
+      "server": "AmazonEC2"
+    },
+    "transferStats": {
+      "http": [
+        []
+      ]
+    }
+  }
+}

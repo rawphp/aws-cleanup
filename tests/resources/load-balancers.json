@@ -1,9 +1,5 @@
 {
-    "LoadBalancerDescriptions": [
-        {
-            "LoadBalancerName": "main"
-        }
-    ],
+    "LoadBalancers": [],
     "@metadata": {
         "statusCode": 200,
         "effectiveUri": "https:\/\/elasticloadbalancing.ap-southeast-2.amazonaws.com",

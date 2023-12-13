@@ -1,0 +1,101 @@
+{
+    "AutoScalingGroups": [
+        {
+            "AutoScalingGroupName": "myapp",
+            "AutoScalingGroupARN": "arn:aws:autoscaling:ap-southeast-2:450332024000:autoScalingGroup:3997c447-2d28-4be8-a604-368ac4ac384e:autoScalingGroupName\/myapp",
+            "MixedInstancesPolicy": {
+                "LaunchTemplate": {
+                    "LaunchTemplateSpecification": {
+                        "LaunchTemplateId": "lt-09aa646e47c19297f",
+                        "LaunchTemplateName": "mytemplate",
+                        "Version": "$Default"
+                    },
+                    "Overrides": [
+                        {
+                            "InstanceRequirements": {
+                                "VCpuCount": {
+                                    "Min": 1,
+                                    "Max": 2
+                                },
+                                "MemoryMiB": {
+                                    "Min": 1024,
+                                    "Max": 2048
+                                }
+                            }
+                        }
+                    ]
+                },
+                "InstancesDistribution": {
+                    "OnDemandAllocationStrategy": "lowest-price",
+                    "OnDemandBaseCapacity": 0,
+                    "OnDemandPercentageAboveBaseCapacity": 100,
+                    "SpotAllocationStrategy": "lowest-price",
+                    "SpotInstancePools": 2
+                }
+            },
+            "MinSize": 1,
+            "MaxSize": 1,
+            "DesiredCapacity": 1,
+            "DefaultCooldown": 300,
+            "AvailabilityZones": [
+                "ap-southeast-2b",
+                "ap-southeast-2a"
+            ],
+            "LoadBalancerNames": [],
+            "TargetGroupARNs": [
+                "arn:aws:elasticloadbalancing:ap-southeast-2:450332024000:targetgroup\/myapp-1\/6b6ff76cd2d02011"
+            ],
+            "HealthCheckType": "EC2",
+            "HealthCheckGracePeriod": 300,
+            "Instances": [
+                {
+                    "InstanceId": "i-098196e7b5c1d9a3c",
+                    "InstanceType": "m1.small",
+                    "AvailabilityZone": "ap-southeast-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-09aa646e47c19297f",
+                        "LaunchTemplateName": "mytemplate",
+                        "Version": "1"
+                    },
+                    "ProtectedFromScaleIn": false
+                }
+            ],
+            "CreatedTime": "2023-12-11T03:50:20+00:00",
+            "SuspendedProcesses": [],
+            "VPCZoneIdentifier": "subnet-021e48c4afe2ea361,subnet-04744dff95a728867",
+            "EnabledMetrics": [],
+            "Tags": [],
+            "TerminationPolicies": [
+                "Default"
+            ],
+            "NewInstancesProtectedFromScaleIn": false,
+            "ServiceLinkedRoleARN": "arn:aws:iam::450332024000:role\/aws-service-role\/autoscaling.amazonaws.com\/AWSServiceRoleForAutoScaling",
+            "CapacityRebalance": true,
+            "DesiredCapacityType": "units",
+            "TrafficSources": [
+                {
+                    "Identifier": "arn:aws:elasticloadbalancing:ap-southeast-2:450332024000:targetgroup\/myapp-1\/6b6ff76cd2d02011",
+                    "Type": "elbv2"
+                }
+            ]
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https:\/\/autoscaling.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "ee760d31-5205-49de-ba61-251a6c498380",
+            "content-type": "text\/xml",
+            "content-length": "4055",
+            "vary": "accept-encoding",
+            "date": "Mon, 11 Dec 2023 03:51:09 GMT"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}

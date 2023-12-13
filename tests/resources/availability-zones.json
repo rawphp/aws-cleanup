@@ -1,0 +1,55 @@
+{
+    "AvailabilityZones": [
+        {
+            "State": "available",
+            "OptInStatus": "opt-in-not-required",
+            "Messages": [],
+            "RegionName": "ap-southeast-2",
+            "ZoneName": "ap-southeast-2a",
+            "ZoneId": "apse2-az3",
+            "GroupName": "ap-southeast-2",
+            "NetworkBorderGroup": "ap-southeast-2",
+            "ZoneType": "availability-zone"
+        },
+        {
+            "State": "available",
+            "OptInStatus": "opt-in-not-required",
+            "Messages": [],
+            "RegionName": "ap-southeast-2",
+            "ZoneName": "ap-southeast-2b",
+            "ZoneId": "apse2-az1",
+            "GroupName": "ap-southeast-2",
+            "NetworkBorderGroup": "ap-southeast-2",
+            "ZoneType": "availability-zone"
+        },
+        {
+            "State": "available",
+            "OptInStatus": "opt-in-not-required",
+            "Messages": [],
+            "RegionName": "ap-southeast-2",
+            "ZoneName": "ap-southeast-2c",
+            "ZoneId": "apse2-az2",
+            "GroupName": "ap-southeast-2",
+            "NetworkBorderGroup": "ap-southeast-2",
+            "ZoneType": "availability-zone"
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https:\/\/ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "0a6f7ebd-bb32-4ac0-8991-0981105090b4",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "content-type": "text\/xml;charset=UTF-8",
+            "content-length": "1689",
+            "date": "Wed, 13 Dec 2023 02:15:35 GMT",
+            "server": "AmazonEC2"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Aws\AutoScaling\AutoScalingClient;
 use Aws\Ec2\Ec2Client;
 use Aws\ElasticLoadBalancing\ElasticLoadBalancingClient;
 use Aws\S3\S3Client;
@@ -28,9 +29,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(S3Client::class, function ($app, $args) {
             return new S3Client(['region' => $args['region']]);
         });
-        $this->app->bind(ElasticLoadBalancingClient::class, function ($app, $args) {
-            return new ElasticLoadBalancingClient(['region' => $args['region']]);
+        $this->app->bind(AutoScalingClient::class, function ($app, $args) {
+            return new AutoScalingClient(['region' => $args['region']]);
         });
+//        $this->app->bind(ElasticLoadBalancingClient::class, function ($app, $args) {
+//            return new ElasticLoadBalancingClient(['region' => $args['region']]);
+//        });
 
     }
 }

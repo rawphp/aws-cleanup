@@ -15,6 +15,7 @@ class ShowCommand extends Command
     protected $signature = "show
     {--onlyRegions= : Limit regions to this space-delimited list}
     {--outputJson : Output data as JSON}
+    {--excludeDefault : Don't include default resources}
     ";
 
     /**
@@ -27,11 +28,12 @@ class ShowCommand extends Command
     public function handle(AWSService $awsService): int
     {
         $outputJson = $this->option('outputJson');
+        $excludeDefault = $this->option('excludeDefault');
         $regions = array_filter(explode(' ', $this->option('onlyRegions', '')));
 
         $onlyRegions = empty($regions) ? config('aws.regions') : $regions;
 
-        $resourceGroups = $awsService->list($onlyRegions);
+        $resourceGroups = $awsService->list($onlyRegions, $excludeDefault);
 
         $list = [];
 

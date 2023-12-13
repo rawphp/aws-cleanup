@@ -6,5 +6,32 @@ You can optionally exclude some resources.
 
 ## Commands
 
-- list
-- delete --dry
+- show
+- clean --dry
+
+### Show Command
+
+```shell
+php artisan show
+```
+
+#### AWS Resources Supported
+
+- Security Groups
+- Ec2 Instances
+- Volumes
+- Scaling Groups
+- // Load Balancers (?)
+- Elastic IPs
+- Key Pairs
+- S3 Buckets
+
+### Clean Command
+
+```shell
+php artisan delete
+```
+
+#### AWS Resources Supported
+
+- Ec2 Instances

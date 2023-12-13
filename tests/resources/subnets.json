@@ -1,0 +1,69 @@
+{
+    "Subnets": [
+        {
+            "AvailabilityZone": "ap-southeast-2a",
+            "AvailabilityZoneId": "apse2-az3",
+            "AvailableIpAddressCount": 4091,
+            "CidrBlock": "172.31.0.0\/20",
+            "DefaultForAz": false,
+            "MapPublicIpOnLaunch": false,
+            "MapCustomerOwnedIpOnLaunch": false,
+            "State": "available",
+            "SubnetId": "subnet-021e48c4afe2ea361",
+            "VpcId": "vpc-0769fc0b342a7b69f",
+            "OwnerId": "450332024000",
+            "AssignIpv6AddressOnCreation": false,
+            "Ipv6CidrBlockAssociationSet": [],
+            "SubnetArn": "arn:aws:ec2:ap-southeast-2:450332024000:subnet\/subnet-021e48c4afe2ea361",
+            "EnableDns64": false,
+            "Ipv6Native": false,
+            "PrivateDnsNameOptionsOnLaunch": {
+                "HostnameType": "ip-name",
+                "EnableResourceNameDnsARecord": false,
+                "EnableResourceNameDnsAAAARecord": false
+            }
+        },
+        {
+            "AvailabilityZone": "ap-southeast-2b",
+            "AvailabilityZoneId": "apse2-az1",
+            "AvailableIpAddressCount": 4091,
+            "CidrBlock": "172.31.16.0\/20",
+            "DefaultForAz": false,
+            "MapPublicIpOnLaunch": false,
+            "MapCustomerOwnedIpOnLaunch": false,
+            "State": "available",
+            "SubnetId": "subnet-04744dff95a728867",
+            "VpcId": "vpc-0769fc0b342a7b69f",
+            "OwnerId": "450332024000",
+            "AssignIpv6AddressOnCreation": false,
+            "Ipv6CidrBlockAssociationSet": [],
+            "SubnetArn": "arn:aws:ec2:ap-southeast-2:450332024000:subnet\/subnet-04744dff95a728867",
+            "EnableDns64": false,
+            "Ipv6Native": false,
+            "PrivateDnsNameOptionsOnLaunch": {
+                "HostnameType": "ip-name",
+                "EnableResourceNameDnsARecord": false,
+                "EnableResourceNameDnsAAAARecord": false
+            }
+        }
+    ],
+    "@metadata": {
+        "statusCode": 200,
+        "effectiveUri": "https:\/\/ec2.ap-southeast-2.amazonaws.com",
+        "headers": {
+            "x-amzn-requestid": "4305088c-ef4b-46b9-a93f-1b71ac2cfb08",
+            "cache-control": "no-cache, no-store",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "accept-encoding",
+            "content-type": "text\/xml;charset=UTF-8",
+            "content-length": "2790",
+            "date": "Wed, 13 Dec 2023 01:36:16 GMT",
+            "server": "AmazonEC2"
+        },
+        "transferStats": {
+            "http": [
+                []
+            ]
+        }
+    }
+}

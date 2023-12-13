@@ -2,16 +2,19 @@
 
 namespace App\Services;
 
+use Aws\AutoScaling\AutoScalingClient;
 use Aws\Ec2\Ec2Client;
-use Aws\ElasticLoadBalancing\ElasticLoadBalancingClient;
 use Aws\S3\S3Client;
 use Exception;
 
+/**
+ * Represents an AWS Service for managing resources.
+ */
 class AWSService
 {
     protected array $regions = [];
 
-    public function list(array $regions): array
+    public function list(array $regions, bool $excludeDefault = false): array
     {
         $this->validateRegions($regions);
 
@@ -21,13 +24,15 @@ class AWSService
         // ec2 instances
         $instances = $this->getEc2Instances($regions);
 
-        // ec2 load balancers
-        $loadBalancers = $this->getLoadBalancers($regions);
-
         // volumes
         $volumes = $this->getVolumes($regions);
 
         // auto-scaling groups
+        $scalingGroups = $this->getAutoScalingGroups($regions);
+
+        // ec2 load balancers
+        $loadBalancers = $this->getLoadBalancers($scalingGroups);
+
         // elastic IPs
         $elasticIps = $this->getElasticIPs($regions);
 
@@ -35,44 +40,75 @@ class AWSService
         $keyPairs = $this->getKeyPairs($regions);
 
         // snapshots
+        $snapshots = $this->getSnapshots($regions);
+
+        // availability zones
+        $availabilityZones = $this->getAvailabilityZones($regions);
+
+        // subnets
+        $subnets = $this->getSubnets($regions);
+
+        // vpcs
+        $vpcs = $this->getVpcs($regions);
 
         // S3 buckets
         $buckets = $this->getS3Buckets($regions[0]);
 
-
-        return [
+        return $this->removeDefaultResources([
             'securityGroups' => $securityGroups,
             'ec2Instances' => $instances,
+            'loadBalancers' => $loadBalancers,
             'volumes' => $volumes,
+            'snapshots' => $snapshots,
             'keyPairs' => $keyPairs,
             'elasticIPs' => $elasticIps,
             's3Buckets' => $buckets,
-        ];
+            'vpcs' => $vpcs,
+            'subnets' => $subnets,
+            'availabilityZones' => $availabilityZones,
+        ]);
+    }
+
+    public function getAvailabilityZones(array $regions): array
+    {
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeAvailabilityZones',
+            'AvailabilityZones',
+            'ZoneId',
+            'ZoneName',
+        );
+    }
+
+    public function getSubnets(array $regions): array
+    {
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeSubnets',
+            'Subnets',
+            'SubnetId',
+        );
+    }
+
+    public function getSnapshots(array $regions): array
+    {
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeSnapshots',
+            'Snapshots',
+            'SnapshotId',
+        );
     }
 
     public function getSecurityGroups(array $regions): array
     {
-        $groups = [];
-
-        foreach ($regions as $region) {
-            dump('Checking security groups for region: ' . $region);
-            $groupsByRegion = [];
-
-            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
-
-            $securityGroups = $ec2Client->describeSecurityGroups();
-
-            foreach ($securityGroups->get('SecurityGroups') as $group) {
-                $groupsByRegion[] = [
-                    'name' => $group['GroupName'],
-                    'id' => $group['GroupId'],
-                ];
-            }
-
-            $groups[$region] = $groupsByRegion;
-        }
-
-        return $groups;
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeSecurityGroups',
+            'SecurityGroups',
+            'GroupId',
+            'GroupName',
+        );
     }
 
     public function getEc2Instances(array $regions): array
@@ -92,7 +128,7 @@ class AWSService
                 foreach ($reservation['Instances'] as $instance) {
                     $instancesByRegion[] = [
                         'id' => $instance['InstanceId'],
-                        'name' => $this->getNameIfAvailable($instance)
+                        'name' => $this->getNameFromTagsIfAvailable($instance)
                     ];
                 }
             }
@@ -105,28 +141,12 @@ class AWSService
 
     public function getVolumes(array $regions): array
     {
-        $instances = [];
-
-        foreach ($regions as $region) {
-            dump('Checking volumes for region: ' . $region);
-            $instancesByRegion = [];
-
-            /** @var Ec2Client $ec2Client */
-            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
-
-            $result = $ec2Client->describeVolumes();
-
-            foreach ($result->get('Volumes') as $volume) {
-                    $instancesByRegion[] = [
-                        'id' => $volume['VolumeId'],
-                        'name' => $this->getNameIfAvailable($volume)
-                    ];
-            }
-
-            $instances[$region] = $instancesByRegion;
-        }
-
-        return $instances;
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeVolumes',
+            'Volumes',
+            'VolumeId',
+        );
     }
 
     public function getS3Buckets(string $region): array
@@ -152,70 +172,53 @@ class AWSService
 
     public function getKeyPairs(array $regions): array
     {
-        $keyPairs = [];
-
-        foreach ($regions as $region) {
-            dump('Checking key pairs for region: ' . $region);
-            $keyPairsByRegion = [];
-
-            /** @var Ec2Client $ec2Client */
-            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
-
-            $result = $ec2Client->describeKeyPairs();
-
-            foreach ($result->get('KeyPairs') as $keyPair) {
-                $keyPairsByRegion[] = [
-                    'id' => $keyPair['KeyPairId'],
-                    'name' => $keyPair['KeyName'],
-                ];
-            }
-
-            $keyPairs[$region] = $keyPairsByRegion;
-        }
-
-        return $keyPairs;
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeKeyPairs',
+            'KeyPairs',
+            'KeyPairId',
+            'KeyName',
+        );
     }
 
     public function getElasticIPs(array $regions): array
     {
-        $addresses = [];
-
-        foreach ($regions as $region) {
-            dump('Checking elastic IPs for region: ' . $region);
-            $addressByRegion = [];
-
-            /** @var Ec2Client $ec2Client */
-            $ec2Client = resolve(Ec2Client::class, ['region' => $region]);
-
-            $result = $ec2Client->describeAddresses();
-
-            foreach ($result->get('Addresses') as $address) {
-                $addressByRegion[] = [
-                    'id' => $address['AllocationId'],
-                    'name' => $address['PublicIp'],
-                ];
-            }
-
-            $addresses[$region] = $addressByRegion;
-        }
-
-        return $addresses;
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeAddresses',
+            'Addresses',
+            'AllocationId',
+            'PublicIp',
+        );
     }
 
-    public function getLoadBalancers(array $regions): array
+    public function getAutoScalingGroups(array $regions): array
+    {
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(AutoScalingClient::class, ['region' => $region]),
+            'describeAutoScalingGroups',
+            'AutoScalingGroups',
+            'AutoScalingGroupARN',
+            'AutoScalingGroupName',
+        );
+    }
+
+    public function getLoadBalancers(array $autoScalingGroups): array
     {
         $loadBalancers = [];
 
-        foreach ($regions as $region) {
-            dump('Checking load balancers for region: ' . $region);
+        foreach ($autoScalingGroups as $region => $scalingGroup) {
+            dump('Checking load balancers for scaling group: ' . $scalingGroup['name']);
             $loadBalancersByRegion = [];
 
-            /** @var ElasticLoadBalancingClient $ec2Client */
-            $client = resolve(ElasticLoadBalancingClient::class, ['region' => $region]);
+            /** @var AutoScalingClient $client */
+            $client = resolve(AutoScalingClient::class, ['region' => $region]);
 
-            $result = $client->describeLoadBalancers();
+            $result = $client->describeLoadBalancers([
+                'AutoScalingGroupName' => $scalingGroup['name']
+            ]);
 
-            foreach ($result->get('LoadBalancerDescriptions') as $loadBalancer) {
+            foreach ($result->get('LoadBalancers') as $loadBalancer) {
                 $loadBalancersByRegion[] = [
                     'id' => '',
                     'name' => $loadBalancer['LoadBalancerName'],
@@ -226,6 +229,55 @@ class AWSService
         }
 
         return $loadBalancers;
+    }
+
+    public function getVpcs(array $regions): array
+    {
+        return $this->handleDescribeResource($regions,
+            fn(string $region) => resolve(Ec2Client::class, ['region' => $region]),
+            'describeVpcs',
+            'Vpcs',
+            'VpcId',
+        );
+    }
+
+    public function handleDescribeResource(
+        array       $regions,
+        callable    $getClient,
+        string      $action,
+        string      $resourceKey,
+        string      $idName,
+        string|null $resourceName = null,
+    ): array
+    {
+        $data = [];
+
+        foreach ($regions as $region) {
+            dump("Checking $resourceKey for region: $region");
+            $dataByRegion = [];
+
+            $client = $getClient($region);
+            $result = $client->$action();
+
+            if ($result->get('@metadata')['statusCode'] !== 200) {
+                return [];
+            }
+
+            dump(json_encode($result->toArray()));
+
+            foreach ($result->get($resourceKey) as $resource) {
+                $dataByRegion[] = [
+                    'id' => $resource[$idName],
+                    'name' => !is_null($resourceName)
+                        ? $resource[$resourceName]
+                        : $this->getNameFromTagsIfAvailable($resource)
+                ];
+            }
+
+            $data[$region] = $dataByRegion;
+        }
+
+        return $data;
     }
 
     /**
@@ -264,7 +316,24 @@ class AWSService
         return true;
     }
 
-    public function getNameIfAvailable(array $resource): string
+    public function removeDefaultResources(array $resourcesList): array
+    {
+        // Default resources to be removed
+        $defaultResources = [];
+
+        foreach ($resourcesList as $key => $resource) {
+            if (in_array($resource['name'], $defaultResources, true)) {
+                unset($resourcesList[$key]);
+            }
+        }
+
+        // Re-index the array
+        $resourcesList = array_values($resourcesList);
+
+        return $resourcesList;
+    }
+
+    public function getNameFromTagsIfAvailable(array $resource): string
     {
         $tags = [];
 
