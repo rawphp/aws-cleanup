@@ -1,29 +1,30 @@
 {
-    "name": "laravel-zero/laravel-zero",
-    "description": "The Laravel Zero Framework.",
-    "keywords": ["framework", "laravel", "laravel zero", "console", "cli"],
-    "homepage": "https://laravel-zero.com",
+    "name": "rawphp/aws-cleanup",
+    "description": "AWS Cleanup tool",
+    "keywords": ["aws", "php", "clean"],
+    "homepage": "https://github.com/rawphp/aws-cleanup",
     "type": "project",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/laravel-zero/laravel-zero/issues",
-        "source": "https://github.com/laravel-zero/laravel-zero"
+        "issues": "https://github.com/rawphp/aws-cleanup/issues",
+        "source": "https://github.com/rawphp/aws-cleanup"
     },
     "authors": [
         {
-            "name": "Nuno Maduro",
-            "email": "enunomaduro@gmail.com"
+            "name": "Tom Kaczocha",
+            "email": "tomkaczocha@gmail.com"
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.0",
         "aws/aws-sdk-php": "^3.293",
         "laminas/laminas-text": "^2.5",
-        "laravel-zero/framework": "^10.2",
+        "laravel-zero/phar-updater": "^1.3",
         "nunomaduro/termwind": "^1.15.1"
     },
     "require-dev": {
         "laravel/pint": "^1.13",
+        "laravel-zero/framework": "^10.2",
         "mockery/mockery": "^1.6",
         "pestphp/pest": "^2.22",
         "pestphp/pest-plugin-watch": "^2.0"
@@ -50,5 +51,5 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "bin": ["artisan"]
+    "bin": ["builds/aws-cleanup"]
 }

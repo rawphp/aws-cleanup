@@ -12,7 +12,7 @@ You can optionally exclude some resources.
 ### Show Command
 
 ```shell
-php artisan show
+aws-cleanup show
 ```
 
 #### AWS Resources Supported
@@ -20,16 +20,20 @@ php artisan show
 - Security Groups
 - Ec2 Instances
 - Volumes
-- Scaling Groups
-- // Load Balancers (?)
+- Auto Scaling Groups
 - Elastic IPs
 - Key Pairs
+- Availability Zones
+- Subnets
+- VPCs
 - S3 Buckets
 
 ### Clean Command
 
 ```shell
-php artisan delete
+aws-cleanup clean
+
+
 ```
 
 #### AWS Resources Supported

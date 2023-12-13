@@ -19,16 +19,23 @@ class CleanCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Deletes all aws resources in the default aws profile';
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function handle(): int
     {
-        //
+        /*
+         * following is just an idea of how to structure the cleanup work
+         */
+        $resources = ['S3 bucket 1' => true, 'S3 bucket 2' => false];
+
+        foreach ($resources as $resource => $result)
+        {
+            $this->task("deleting $resource", function () use ($result) {
+                return $result;
+            });
+        }
+
+        return self::SUCCESS;
     }
 
     /**

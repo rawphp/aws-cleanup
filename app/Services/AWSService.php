@@ -30,9 +30,6 @@ class AWSService
         // auto-scaling groups
         $scalingGroups = $this->getAutoScalingGroups($regions);
 
-        // ec2 load balancers
-        $loadBalancers = $this->getLoadBalancers($scalingGroups);
-
         // elastic IPs
         $elasticIps = $this->getElasticIPs($regions);
 
@@ -54,10 +51,9 @@ class AWSService
         // S3 buckets
         $buckets = $this->getS3Buckets($regions[0]);
 
-        return $this->removeDefaultResources([
+        return [
             'securityGroups' => $securityGroups,
             'ec2Instances' => $instances,
-            'loadBalancers' => $loadBalancers,
             'volumes' => $volumes,
             'snapshots' => $snapshots,
             'keyPairs' => $keyPairs,
@@ -66,7 +62,7 @@ class AWSService
             'vpcs' => $vpcs,
             'subnets' => $subnets,
             'availabilityZones' => $availabilityZones,
-        ]);
+        ];
     }
 
     public function getAvailabilityZones(array $regions): array
@@ -203,34 +199,6 @@ class AWSService
         );
     }
 
-    public function getLoadBalancers(array $autoScalingGroups): array
-    {
-        $loadBalancers = [];
-
-        foreach ($autoScalingGroups as $region => $scalingGroup) {
-            dump('Checking load balancers for scaling group: ' . $scalingGroup['name']);
-            $loadBalancersByRegion = [];
-
-            /** @var AutoScalingClient $client */
-            $client = resolve(AutoScalingClient::class, ['region' => $region]);
-
-            $result = $client->describeLoadBalancers([
-                'AutoScalingGroupName' => $scalingGroup['name']
-            ]);
-
-            foreach ($result->get('LoadBalancers') as $loadBalancer) {
-                $loadBalancersByRegion[] = [
-                    'id' => '',
-                    'name' => $loadBalancer['LoadBalancerName'],
-                ];
-            }
-
-            $loadBalancers[$region] = $loadBalancersByRegion;
-        }
-
-        return $loadBalancers;
-    }
-
     public function getVpcs(array $regions): array
     {
         return $this->handleDescribeResource($regions,
@@ -314,23 +282,6 @@ class AWSService
         }
 
         return true;
-    }
-
-    public function removeDefaultResources(array $resourcesList): array
-    {
-        // Default resources to be removed
-        $defaultResources = [];
-
-        foreach ($resourcesList as $key => $resource) {
-            if (in_array($resource['name'], $defaultResources, true)) {
-                unset($resourcesList[$key]);
-            }
-        }
-
-        // Re-index the array
-        $resourcesList = array_values($resourcesList);
-
-        return $resourcesList;
     }
 
     public function getNameFromTagsIfAvailable(array $resource): string

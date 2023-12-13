@@ -137,29 +137,6 @@ describe('list', function () {
 
     });
 
-    test('getLoadBalancers', function () {
-        $service = new AWSService();
-
-        mock(AutoScalingClient::class, function (MockInterface $mock) {
-            $result = new Result(loadJson('load-balancers'));
-
-            app()->bind(AutoScalingClient::class, fn() => $mock);
-
-            $mock->expects('describeLoadBalancers')->andReturn($result);
-        });
-
-        $autoScalingGroups = [
-            'ap-southeast-2' => [
-                'id' => 'arn:aws:autoscaling:ap-southeast-2:450332024000:autoScalingGroup:3997c447-2d28-4be8-a604-368ac4ac384e:autoScalingGroupName/myapp',
-                'name' => 'myapp',
-            ],
-        ];
-
-        $resources = $service->getLoadBalancers($autoScalingGroups);
-
-        expect($resources)->toHaveKey('ap-southeast-2');
-    });
-
     test('getVpcs', function () {
         $service = new AWSService();
 

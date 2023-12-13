@@ -32,9 +32,5 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AutoScalingClient::class, function ($app, $args) {
             return new AutoScalingClient(['region' => $args['region']]);
         });
-//        $this->app->bind(ElasticLoadBalancingClient::class, function ($app, $args) {
-//            return new ElasticLoadBalancingClient(['region' => $args['region']]);
-//        });
-
     }
 }
