@@ -1,5 +1,7 @@
 # AWS Cleanup
 
+NOTE: IN ACTIVE DEVELOPMENT - NOT READY FOR PRODUCTION USE
+
 This tool can be ran against an AWS account and delete all existing resources to prevent being charged.
 
 You can optionally exclude some resources.
